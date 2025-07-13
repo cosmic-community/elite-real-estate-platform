@@ -80,3 +80,14 @@ export interface PropertyFilters {
   minBathrooms?: number
   maxBathrooms?: number
 }
+
+// Component props interfaces
+export interface AgentCardProps {
+  agent: Agent
+  className?: string
+}
+
+export interface PropertyCardProps {
+  property: Property
+  className?: string
+}

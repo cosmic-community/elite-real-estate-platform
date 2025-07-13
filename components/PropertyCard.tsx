@@ -65,7 +65,7 @@ export default function PropertyCard({ property, className = '' }: PropertyCardP
           
           {property.metadata.features && property.metadata.features.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-1">
-              {property.metadata.features.slice(0, 3).map((feature, index) => (
+              {property.metadata.features.slice(0, 3).map((feature: string, index: number) => (
                 <span
                   key={index}
                   className="text-xs px-2 py-1 bg-secondary-100 text-secondary-700 rounded"

@@ -49,7 +49,7 @@ export default function AgentCard({ agent, className = '' }: AgentCardProps) {
                 Specialties
               </h4>
               <div className="flex flex-wrap gap-1">
-                {agent.metadata.specialties.slice(0, 3).map((specialty, index) => (
+                {agent.metadata.specialties.slice(0, 3).map((specialty: string, index: number) => (
                   <span
                     key={index}
                     className="text-xs px-2 py-1 bg-primary-100 text-primary-800 rounded"
