@@ -17,19 +17,17 @@ export interface PropertyFilters {
 }
 
 export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) {
-  const [filters, setFilters] = useState<PropertyFilters>({
-    type: '',
-    status: '',
-    minPrice: undefined,
-    maxPrice: undefined,
-    minBedrooms: undefined,
-    maxBedrooms: undefined,
-    minBathrooms: undefined,
-    maxBathrooms: undefined
-  })
+  const [filters, setFilters] = useState<PropertyFilters>({})
 
   const handleFilterChange = (key: keyof PropertyFilters, value: string | number | undefined) => {
-    const newFilters = { ...filters, [key]: value === '' ? undefined : value }
+    let processedValue: string | number | undefined = value
+    
+    // Convert empty strings to undefined
+    if (value === '' || value === 0) {
+      processedValue = undefined
+    }
+    
+    const newFilters = { ...filters, [key]: processedValue }
     setFilters(newFilters)
     onFilterChange(newFilters)
   }
@@ -46,7 +44,7 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
           </label>
           <select
             value={filters.type || ''}
-            onChange={(e) => handleFilterChange('type', e.target.value)}
+            onChange={(e) => handleFilterChange('type', e.target.value || undefined)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">All Types</option>
@@ -129,7 +127,7 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
           </label>
           <select
             value={filters.status || ''}
-            onChange={(e) => handleFilterChange('status', e.target.value)}
+            onChange={(e) => handleFilterChange('status', e.target.value || undefined)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">All Status</option>
@@ -142,16 +140,7 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
         {/* Clear Filters */}
         <button
           onClick={() => {
-            const resetFilters: PropertyFilters = {
-              type: '',
-              status: '',
-              minPrice: undefined,
-              maxPrice: undefined,
-              minBedrooms: undefined,
-              maxBedrooms: undefined,
-              minBathrooms: undefined,
-              maxBathrooms: undefined
-            }
+            const resetFilters: PropertyFilters = {}
             setFilters(resetFilters)
             onFilterChange(resetFilters)
           }}

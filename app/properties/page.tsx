@@ -29,14 +29,13 @@ export default function PropertiesPage() {
   const handleFilterChange = (filters: PropertyFilters) => {
     let filtered = [...properties]
 
-    // Filter by property type
+    // Only apply filters if they have values
     if (filters.type) {
       filtered = filtered.filter(property => 
         property.metadata.property_type?.key === filters.type
       )
     }
 
-    // Filter by price range
     if (filters.minPrice && filters.minPrice > 0) {
       filtered = filtered.filter(property => 
         property.metadata.price >= filters.minPrice!
@@ -49,21 +48,18 @@ export default function PropertiesPage() {
       )
     }
 
-    // Filter by bedrooms
     if (filters.minBedrooms && filters.minBedrooms > 0) {
       filtered = filtered.filter(property => 
         property.metadata.bedrooms >= filters.minBedrooms!
       )
     }
 
-    // Filter by bathrooms
     if (filters.minBathrooms && filters.minBathrooms > 0) {
       filtered = filtered.filter(property => 
         property.metadata.bathrooms >= filters.minBathrooms!
       )
     }
 
-    // Filter by status
     if (filters.status) {
       filtered = filtered.filter(property => 
         property.metadata.property_status?.key === filters.status
