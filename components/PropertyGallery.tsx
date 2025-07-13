@@ -1,14 +1,16 @@
 'use client'
 import { useState } from 'react'
-import { Property } from '@/types'
 
 interface PropertyGalleryProps {
-  property: Property
+  images: Array<{
+    url: string
+    imgix_url: string
+  }>
 }
 
-export default function PropertyGallery({ property }: PropertyGalleryProps) {
+export default function PropertyGallery({ images }: PropertyGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0)
-  const gallery = property.metadata.gallery || []
+  const gallery = images || []
 
   if (!gallery || gallery.length === 0) {
     return null
@@ -20,7 +22,7 @@ export default function PropertyGallery({ property }: PropertyGalleryProps) {
       <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
         <img
           src={`${gallery[selectedImage]?.imgix_url}?w=800&h=450&fit=crop&auto=format,compress`}
-          alt={`${property.title} - Image ${selectedImage + 1}`}
+          alt={`Property - Image ${selectedImage + 1}`}
           className="w-full h-full object-cover"
         />
       </div>
@@ -38,7 +40,7 @@ export default function PropertyGallery({ property }: PropertyGalleryProps) {
             >
               <img
                 src={`${image.imgix_url}?w=80&h=80&fit=crop&auto=format,compress`}
-                alt={`${property.title} - Thumbnail ${index + 1}`}
+                alt={`Property - Thumbnail ${index + 1}`}
                 className="w-full h-full object-cover"
               />
             </button>
