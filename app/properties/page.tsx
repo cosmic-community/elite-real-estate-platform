@@ -76,23 +76,38 @@ export default async function PropertiesPage({
           </p>
         </div>
         
-        <div className="mb-8">
-          <PropertyFilter />
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProperties.map((property: Property) => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
-        </div>
-        
-        {filteredProperties.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-lg text-gray-600">
-              No properties found matching your filters.
-            </p>
+        {/* 2-Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Left Column - Filters */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8">
+              <PropertyFilter />
+            </div>
           </div>
-        )}
+          
+          {/* Right Column - Properties */}
+          <div className="lg:col-span-3">
+            <div className="mb-4">
+              <p className="text-sm text-gray-600">
+                {filteredProperties.length} {filteredProperties.length === 1 ? 'property' : 'properties'} found
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {filteredProperties.map((property: Property) => (
+                <PropertyCard key={property.id} property={property} />
+              ))}
+            </div>
+            
+            {filteredProperties.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-lg text-gray-600">
+                  No properties found matching your filters.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
