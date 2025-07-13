@@ -1,67 +1,67 @@
-import { getProperties } from '@/lib/cosmic'
-import PropertyCard from '@/components/PropertyCard'
-import PropertyFilter from '@/components/PropertyFilter'
-import { Property } from '@/types'
+import { getProperties } from '@/lib/cosmic';
+import PropertyCard from '@/components/PropertyCard';
+import PropertyFilter from '@/components/PropertyFilter';
+import { Property } from '@/types';
 
 export default async function PropertiesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const params = await searchParams
+  const params = await searchParams;
   
   // Get all properties from server
-  const properties = await getProperties()
+  const properties = await getProperties();
   
   // Apply server-side filtering based on search params
-  let filteredProperties = properties
+  let filteredProperties = properties;
   
-  if (params.type) {
+  if (params.type && typeof params.type === 'string') {
     filteredProperties = filteredProperties.filter(property => 
       property.metadata.property_type?.key === params.type
-    )
+    );
   }
   
-  if (params.minPrice) {
-    const minPrice = Number(params.minPrice)
+  if (params.minPrice && typeof params.minPrice === 'string') {
+    const minPrice = Number(params.minPrice);
     if (!isNaN(minPrice)) {
       filteredProperties = filteredProperties.filter(property => 
         property.metadata.price >= minPrice
-      )
+      );
     }
   }
   
-  if (params.maxPrice) {
-    const maxPrice = Number(params.maxPrice)
+  if (params.maxPrice && typeof params.maxPrice === 'string') {
+    const maxPrice = Number(params.maxPrice);
     if (!isNaN(maxPrice)) {
       filteredProperties = filteredProperties.filter(property => 
         property.metadata.price <= maxPrice
-      )
+      );
     }
   }
   
-  if (params.minBedrooms) {
-    const minBedrooms = Number(params.minBedrooms)
+  if (params.minBedrooms && typeof params.minBedrooms === 'string') {
+    const minBedrooms = Number(params.minBedrooms);
     if (!isNaN(minBedrooms)) {
       filteredProperties = filteredProperties.filter(property => 
         property.metadata.bedrooms >= minBedrooms
-      )
+      );
     }
   }
   
-  if (params.minBathrooms) {
-    const minBathrooms = Number(params.minBathrooms)
+  if (params.minBathrooms && typeof params.minBathrooms === 'string') {
+    const minBathrooms = Number(params.minBathrooms);
     if (!isNaN(minBathrooms)) {
       filteredProperties = filteredProperties.filter(property => 
         property.metadata.bathrooms >= minBathrooms
-      )
+      );
     }
   }
   
-  if (params.status) {
+  if (params.status && typeof params.status === 'string') {
     filteredProperties = filteredProperties.filter(property => 
       property.metadata.property_status?.key === params.status
-    )
+    );
   }
 
   return (
@@ -95,5 +95,5 @@ export default async function PropertiesPage({
         )}
       </div>
     </div>
-  )
+  );
 }

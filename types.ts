@@ -41,7 +41,7 @@ export interface AgentMetadata {
   email?: string
   photo?: CosmicFile
   specialties?: string[]
-  office?: Office
+  office?: Office | string
 }
 
 export interface Agent {

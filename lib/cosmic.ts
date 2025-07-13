@@ -1,5 +1,5 @@
 import { createBucketClient } from '@cosmicjs/sdk';
-import { Property, Agent, Office, CosmicResponse, PropertyFilters } from '../types';
+import { Property, Agent, Office, PropertyFilters } from '../types';
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
@@ -27,7 +27,7 @@ export async function getProperties(): Promise<Property[]> {
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
-    throw new Error('Failed to fetch properties');
+    return [];
   }
 }
 
@@ -47,7 +47,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
-    throw new Error(`Failed to fetch property: ${slug}`);
+    return null;
   }
 }
 
@@ -98,10 +98,7 @@ export async function getFilteredProperties(filters: PropertyFilters): Promise<P
     return properties;
   } catch (error) {
     console.error('Error fetching filtered properties:', error);
-    if (hasStatus(error) && error.status === 404) {
-      return [];
-    }
-    throw new Error('Failed to fetch filtered properties');
+    return [];
   }
 }
 
@@ -116,10 +113,7 @@ export async function getAgents(): Promise<Agent[]> {
     return response.objects as Agent[];
   } catch (error) {
     console.error('Error fetching agents:', error);
-    if (hasStatus(error) && error.status === 404) {
-      return [];
-    }
-    throw new Error('Failed to fetch agents');
+    return [];
   }
 }
 
@@ -136,10 +130,7 @@ export async function getAgent(slug: string): Promise<Agent | null> {
     return response.object as Agent;
   } catch (error) {
     console.error(`Error fetching agent ${slug}:`, error);
-    if (hasStatus(error) && error.status === 404) {
-      return null;
-    }
-    throw new Error(`Failed to fetch agent: ${slug}`);
+    return null;
   }
 }
 
@@ -154,10 +145,7 @@ export async function getOffices(): Promise<Office[]> {
     return response.objects as Office[];
   } catch (error) {
     console.error('Error fetching offices:', error);
-    if (hasStatus(error) && error.status === 404) {
-      return [];
-    }
-    throw new Error('Failed to fetch offices');
+    return [];
   }
 }
 
@@ -174,9 +162,6 @@ export async function getOffice(slug: string): Promise<Office | null> {
     return response.object as Office;
   } catch (error) {
     console.error(`Error fetching office ${slug}:`, error);
-    if (hasStatus(error) && error.status === 404) {
-      return null;
-    }
-    throw new Error(`Failed to fetch office: ${slug}`);
+    return null;
   }
 }
