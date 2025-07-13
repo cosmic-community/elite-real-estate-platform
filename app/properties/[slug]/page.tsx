@@ -3,6 +3,7 @@ import { getProperty } from '@/lib/cosmic';
 import { notFound } from 'next/navigation';
 import PropertyGallery from '@/components/PropertyGallery';
 import AgentCard from '@/components/AgentCard';
+import ContactForm from '@/components/ContactForm';
 import { Property } from '@/types';
 
 interface PropertyPageProps {
@@ -120,6 +121,11 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
               </div>
             )}
           </div>
+        </div>
+        
+        {/* Contact Form */}
+        <div className="mt-12">
+          <ContactForm property={property} />
         </div>
         
         {/* Listing Agent */}
