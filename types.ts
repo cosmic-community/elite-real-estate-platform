@@ -1,145 +1,82 @@
-// Base Cosmic object interface
-interface CosmicObject {
-  id: string;
-  slug: string;
-  title: string;
-  content?: string;
-  metadata: Record<string, any>;
-  type: string;
-  created_at: string;
-  modified_at: string;
-  status?: string;
-  published_at?: string;
+export interface CosmicFile {
+  url: string
+  imgix_url: string
 }
 
-// Property type definitions
-interface Property extends CosmicObject {
-  type: 'properties';
-  metadata: {
-    address: string;
-    price: number;
-    property_type: {
-      key: string;
-      value: string;
-    };
-    bedrooms: number;
-    bathrooms: number;
-    square_feet?: number;
-    description?: string;
-    features?: string[];
-    gallery?: {
-      url: string;
-      imgix_url: string;
-    }[];
-    property_status: {
-      key: string;
-      value: string;
-    };
-    listing_agent?: Agent;
-  };
+export interface PropertyType {
+  key: string
+  value: string
 }
 
-// Agent type definitions
-interface Agent extends CosmicObject {
-  type: 'agents';
-  metadata: {
-    full_name: string;
-    bio?: string;
-    phone?: string;
-    email?: string;
-    photo?: {
-      url: string;
-      imgix_url: string;
-    };
-    specialties?: string[];
-    office?: Office;
-  };
+export interface PropertyStatus {
+  key: string
+  value: string
 }
 
-// Office type definitions
-interface Office extends CosmicObject {
-  type: 'offices';
-  metadata: {
-    office_name: string;
-    address: string;
-    phone?: string;
-    service_areas?: string;
-  };
+export interface PropertyMetadata {
+  address: string
+  price: number
+  property_type: PropertyType
+  bedrooms: number
+  bathrooms: number
+  square_feet?: number
+  description?: string
+  features?: string[]
+  gallery?: CosmicFile[]
+  property_status: PropertyStatus
+  listing_agent?: Agent
 }
 
-// Type literals for select-dropdown values
-type PropertyType = 'house' | 'condo' | 'townhouse' | 'apartment';
-type PropertyStatus = 'sale' | 'rent' | 'sold';
-
-// API response types
-interface CosmicResponse<T> {
-  objects: T[];
-  total: number;
+export interface Property {
+  id: string
+  title: string
+  slug: string
+  metadata: PropertyMetadata
 }
 
-// Filter types - aligned with PropertyFilter component
-interface PropertyFilters {
-  type?: string;
-  status?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  minBedrooms?: number;
-  maxBedrooms?: number;
-  minBathrooms?: number;
-  maxBathrooms?: number;
+export interface AgentMetadata {
+  full_name: string
+  bio?: string
+  phone?: string
+  email?: string
+  photo?: CosmicFile
+  specialties?: string[]
+  office?: Office
 }
 
-// Component prop types
-interface PropertyCardProps {
-  property: Property;
-  className?: string;
+export interface Agent {
+  id: string
+  title: string
+  slug: string
+  metadata: AgentMetadata
 }
 
-interface AgentCardProps {
-  agent: Agent;
-  className?: string;
+export interface OfficeMetadata {
+  office_name: string
+  address: string
+  phone?: string
+  service_areas?: string
 }
 
-interface OfficeCardProps {
-  office: Office;
-  className?: string;
+export interface Office {
+  id: string
+  title: string
+  slug: string
+  metadata: OfficeMetadata
 }
 
-// Type guards
-function isProperty(obj: CosmicObject): obj is Property {
-  return obj.type === 'properties';
+export interface CosmicResponse<T> {
+  objects: T[]
+  total: number
 }
 
-function isAgent(obj: CosmicObject): obj is Agent {
-  return obj.type === 'agents';
+export interface PropertyFilters {
+  type?: string
+  status?: string
+  minPrice?: number
+  maxPrice?: number
+  minBedrooms?: number
+  maxBedrooms?: number
+  minBathrooms?: number
+  maxBathrooms?: number
 }
-
-function isOffice(obj: CosmicObject): obj is Office {
-  return obj.type === 'offices';
-}
-
-// Utility types
-type CreatePropertyData = Omit<Property, 'id' | 'created_at' | 'modified_at'>;
-type UpdatePropertyData = Partial<CreatePropertyData>;
-
-export type {
-  CosmicObject,
-  Property,
-  Agent,
-  Office,
-  PropertyType,
-  PropertyStatus,
-  CosmicResponse,
-  PropertyFilters,
-  PropertyCardProps,
-  AgentCardProps,
-  OfficeCardProps,
-  CreatePropertyData,
-  UpdatePropertyData
-};
-
-export {
-  isProperty,
-  isAgent,
-  isOffice
-};

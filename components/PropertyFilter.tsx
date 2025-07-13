@@ -1,35 +1,35 @@
 'use client'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useCallback } from 'react'
 
-interface PropertyFilterProps {
-  onFilterChange: (filters: PropertyFilters) => void
-}
+export default function PropertyFilter() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-export interface PropertyFilters {
-  type?: string
-  status?: string
-  minPrice?: number
-  maxPrice?: number
-  minBedrooms?: number
-  maxBedrooms?: number
-  minBathrooms?: number
-  maxBathrooms?: number
-}
+  const createQueryString = useCallback(
+    (params: Record<string, string | null>) => {
+      const newSearchParams = new URLSearchParams(searchParams?.toString())
+      
+      Object.entries(params).forEach(([key, value]) => {
+        if (value === null || value === '' || value === '0') {
+          newSearchParams.delete(key)
+        } else {
+          newSearchParams.set(key, value)
+        }
+      })
+      
+      return newSearchParams.toString()
+    },
+    [searchParams]
+  )
 
-export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) {
-  const [filters, setFilters] = useState<PropertyFilters>({})
+  const handleFilterChange = (key: string, value: string) => {
+    const query = createQueryString({ [key]: value })
+    router.push(`/properties?${query}`)
+  }
 
-  const handleFilterChange = (key: keyof PropertyFilters, value: string | number | undefined) => {
-    let processedValue: string | number | undefined = value
-    
-    // Convert empty strings to undefined
-    if (value === '' || value === 0) {
-      processedValue = undefined
-    }
-    
-    const newFilters = { ...filters, [key]: processedValue }
-    setFilters(newFilters)
-    onFilterChange(newFilters)
+  const clearFilters = () => {
+    router.push('/properties')
   }
 
   return (
@@ -43,8 +43,8 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             Property Type
           </label>
           <select
-            value={filters.type || ''}
-            onChange={(e) => handleFilterChange('type', e.target.value || undefined)}
+            value={searchParams?.get('type') || ''}
+            onChange={(e) => handleFilterChange('type', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">All Types</option>
@@ -63,8 +63,8 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             </label>
             <input
               type="number"
-              value={filters.minPrice || ''}
-              onChange={(e) => handleFilterChange('minPrice', e.target.value ? Number(e.target.value) : undefined)}
+              value={searchParams?.get('minPrice') || ''}
+              onChange={(e) => handleFilterChange('minPrice', e.target.value)}
               placeholder="0"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
@@ -75,8 +75,8 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             </label>
             <input
               type="number"
-              value={filters.maxPrice || ''}
-              onChange={(e) => handleFilterChange('maxPrice', e.target.value ? Number(e.target.value) : undefined)}
+              value={searchParams?.get('maxPrice') || ''}
+              onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
               placeholder="No limit"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
@@ -89,16 +89,16 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             Min Bedrooms
           </label>
           <select
-            value={filters.minBedrooms || ''}
-            onChange={(e) => handleFilterChange('minBedrooms', e.target.value ? Number(e.target.value) : undefined)}
+            value={searchParams?.get('minBedrooms') || ''}
+            onChange={(e) => handleFilterChange('minBedrooms', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Any</option>
-            <option value={1}>1+</option>
-            <option value={2}>2+</option>
-            <option value={3}>3+</option>
-            <option value={4}>4+</option>
-            <option value={5}>5+</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+            <option value="5">5+</option>
           </select>
         </div>
 
@@ -108,15 +108,15 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             Min Bathrooms
           </label>
           <select
-            value={filters.minBathrooms || ''}
-            onChange={(e) => handleFilterChange('minBathrooms', e.target.value ? Number(e.target.value) : undefined)}
+            value={searchParams?.get('minBathrooms') || ''}
+            onChange={(e) => handleFilterChange('minBathrooms', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Any</option>
-            <option value={1}>1+</option>
-            <option value={2}>2+</option>
-            <option value={3}>3+</option>
-            <option value={4}>4+</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
           </select>
         </div>
 
@@ -126,8 +126,8 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             Status
           </label>
           <select
-            value={filters.status || ''}
-            onChange={(e) => handleFilterChange('status', e.target.value || undefined)}
+            value={searchParams?.get('status') || ''}
+            onChange={(e) => handleFilterChange('status', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">All Status</option>
@@ -139,11 +139,7 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
 
         {/* Clear Filters */}
         <button
-          onClick={() => {
-            const resetFilters: PropertyFilters = {}
-            setFilters(resetFilters)
-            onFilterChange(resetFilters)
-          }}
+          onClick={clearFilters}
           className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition-colors"
         >
           Clear Filters

@@ -1,83 +1,66 @@
-'use client'
-import { useEffect, useState } from 'react'
 import { getProperties } from '@/lib/cosmic'
 import PropertyCard from '@/components/PropertyCard'
-import PropertyFilter, { PropertyFilters } from '@/components/PropertyFilter'
+import PropertyFilter from '@/components/PropertyFilter'
 import { Property } from '@/types'
 
-export default function PropertiesPage() {
-  const [properties, setProperties] = useState<Property[]>([])
-  const [filteredProperties, setFilteredProperties] = useState<Property[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const data = await getProperties()
-        setProperties(data)
-        setFilteredProperties(data)
-      } catch (error) {
-        console.error('Error fetching properties:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchProperties()
-  }, [])
-
-  const handleFilterChange = (filters: PropertyFilters) => {
-    let filtered = [...properties]
-
-    // Only apply filters if they have values
-    if (filters.type) {
-      filtered = filtered.filter(property => 
-        property.metadata.property_type?.key === filters.type
-      )
-    }
-
-    if (filters.minPrice && filters.minPrice > 0) {
-      filtered = filtered.filter(property => 
-        property.metadata.price >= filters.minPrice!
-      )
-    }
-
-    if (filters.maxPrice && filters.maxPrice > 0) {
-      filtered = filtered.filter(property => 
-        property.metadata.price <= filters.maxPrice!
-      )
-    }
-
-    if (filters.minBedrooms && filters.minBedrooms > 0) {
-      filtered = filtered.filter(property => 
-        property.metadata.bedrooms >= filters.minBedrooms!
-      )
-    }
-
-    if (filters.minBathrooms && filters.minBathrooms > 0) {
-      filtered = filtered.filter(property => 
-        property.metadata.bathrooms >= filters.minBathrooms!
-      )
-    }
-
-    if (filters.status) {
-      filtered = filtered.filter(property => 
-        property.metadata.property_status?.key === filters.status
-      )
-    }
-
-    setFilteredProperties(filtered)
+export default async function PropertiesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const params = await searchParams
+  
+  // Get all properties from server
+  const properties = await getProperties()
+  
+  // Apply server-side filtering based on search params
+  let filteredProperties = properties
+  
+  if (params.type) {
+    filteredProperties = filteredProperties.filter(property => 
+      property.metadata.property_type?.key === params.type
+    )
   }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-lg text-gray-600">Loading properties...</p>
-          </div>
-        </div>
-      </div>
+  
+  if (params.minPrice) {
+    const minPrice = Number(params.minPrice)
+    if (!isNaN(minPrice)) {
+      filteredProperties = filteredProperties.filter(property => 
+        property.metadata.price >= minPrice
+      )
+    }
+  }
+  
+  if (params.maxPrice) {
+    const maxPrice = Number(params.maxPrice)
+    if (!isNaN(maxPrice)) {
+      filteredProperties = filteredProperties.filter(property => 
+        property.metadata.price <= maxPrice
+      )
+    }
+  }
+  
+  if (params.minBedrooms) {
+    const minBedrooms = Number(params.minBedrooms)
+    if (!isNaN(minBedrooms)) {
+      filteredProperties = filteredProperties.filter(property => 
+        property.metadata.bedrooms >= minBedrooms
+      )
+    }
+  }
+  
+  if (params.minBathrooms) {
+    const minBathrooms = Number(params.minBathrooms)
+    if (!isNaN(minBathrooms)) {
+      filteredProperties = filteredProperties.filter(property => 
+        property.metadata.bathrooms >= minBathrooms
+      )
+    }
+  }
+  
+  if (params.status) {
+    filteredProperties = filteredProperties.filter(property => 
+      property.metadata.property_status?.key === params.status
     )
   }
 
@@ -94,7 +77,7 @@ export default function PropertiesPage() {
         </div>
         
         <div className="mb-8">
-          <PropertyFilter onFilterChange={handleFilterChange} />
+          <PropertyFilter />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -103,7 +86,7 @@ export default function PropertiesPage() {
           ))}
         </div>
         
-        {filteredProperties.length === 0 && !loading && (
+        {filteredProperties.length === 0 && (
           <div className="text-center py-12">
             <p className="text-lg text-gray-600">
               No properties found matching your filters.
