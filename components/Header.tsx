@@ -37,6 +37,9 @@ export default function Header() {
             <Link href="/agents" className="text-secondary-700 hover:text-primary-600 font-medium">
               Agents
             </Link>
+            <Link href="/about" className="text-secondary-700 hover:text-primary-600 font-medium">
+              About
+            </Link>
           </nav>
 
           {/* Mobile menu button */}
@@ -78,6 +81,13 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Agents
+              </Link>
+              <Link 
+                href="/about" 
+                className="text-secondary-700 hover:text-primary-600 font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
               </Link>
             </nav>
           </div>

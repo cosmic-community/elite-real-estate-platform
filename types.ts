@@ -65,6 +65,35 @@ export interface Office {
   metadata: OfficeMetadata
 }
 
+export interface AboutPageMetadata {
+  hero_title: string
+  hero_subtitle: string
+  hero_image?: CosmicFile
+  story_title: string
+  story_content: string
+  story_image?: CosmicFile
+  mission_statement: string
+  values_title: string
+  values: AboutValue[]
+  team_title: string
+  team_description: string
+  cta_title: string
+  cta_description: string
+}
+
+export interface AboutValue {
+  title: string
+  description: string
+  icon: string
+}
+
+export interface AboutPage {
+  id: string
+  title: string
+  slug: string
+  metadata: AboutPageMetadata
+}
+
 export interface CosmicResponse<T> {
   objects: T[]
   total: number

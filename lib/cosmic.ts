@@ -1,5 +1,5 @@
 import { createBucketClient } from '@cosmicjs/sdk';
-import { Property, Agent, Office, PropertyFilters } from '../types';
+import { Property, Agent, Office, PropertyFilters, AboutPage } from '../types';
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
@@ -162,6 +162,26 @@ export async function getOffice(slug: string): Promise<Office | null> {
     return response.object as Office;
   } catch (error) {
     console.error(`Error fetching office ${slug}:`, error);
+    return null;
+  }
+}
+
+// About page functions
+export async function getAboutPage(): Promise<AboutPage | null> {
+  try {
+    const response = await cosmic.objects
+      .findOne({ 
+        type: 'about-page'
+      })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    
+    return response.object as AboutPage;
+  } catch (error) {
+    console.error('Error fetching about page:', error);
+    if (hasStatus(error) && error.status === 404) {
+      return null;
+    }
     return null;
   }
 }
