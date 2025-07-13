@@ -46,7 +46,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
                 {formatPrice(property.metadata.price)}
               </div>
               <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800">
-                {property.metadata.property_status.value}
+                {property.metadata.property_status?.value || 'N/A'}
               </div>
             </div>
             
@@ -72,7 +72,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
               </div>
               <div className="bg-secondary-50 p-4 rounded-lg">
                 <div className="text-sm font-medium text-secondary-900">
-                  {property.metadata.property_type.value}
+                  {property.metadata.property_type?.value || 'N/A'}
                 </div>
                 <div className="text-sm text-secondary-600">Type</div>
               </div>

@@ -38,7 +38,7 @@ export default function PropertyCard({ property, className = '' }: PropertyCardP
               {property.title}
             </h3>
             <span className="text-xs px-2 py-1 bg-primary-100 text-primary-800 rounded-full whitespace-nowrap ml-2">
-              {property.metadata.property_status.value}
+              {property.metadata.property_status?.value || 'N/A'}
             </span>
           </div>
           
@@ -59,7 +59,7 @@ export default function PropertyCard({ property, className = '' }: PropertyCardP
               )}
             </div>
             <span className="text-primary-600 font-medium">
-              {property.metadata.property_type.value}
+              {property.metadata.property_type?.value || 'N/A'}
             </span>
           </div>
           
