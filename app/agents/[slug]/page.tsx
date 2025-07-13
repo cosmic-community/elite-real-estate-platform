@@ -1,7 +1,7 @@
 // app/agents/[slug]/page.tsx
 import { getAgent } from '@/lib/cosmic';
 import { notFound } from 'next/navigation';
-import { Agent } from '@/types';
+import { Agent, isOfficeObject } from '@/types';
 
 interface AgentPageProps {
   params: Promise<{ slug: string }>;
@@ -101,7 +101,7 @@ export default async function AgentPage({ params }: AgentPageProps) {
               )}
               
               {/* Office */}
-              {agent.metadata.office && (
+              {isOfficeObject(agent.metadata.office) && (
                 <div>
                   <h2 className="text-xl font-semibold text-secondary-900 mb-3">
                     Office

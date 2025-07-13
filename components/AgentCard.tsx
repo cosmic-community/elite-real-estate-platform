@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { AgentCardProps } from '@/types';
+import { AgentCardProps, isOfficeObject } from '@/types';
 
 export default function AgentCard({ agent, className = '' }: AgentCardProps) {
   return (
@@ -29,7 +29,7 @@ export default function AgentCard({ agent, className = '' }: AgentCardProps) {
               <h3 className="text-xl font-semibold text-secondary-900">
                 {agent.metadata.full_name}
               </h3>
-              {agent.metadata.office && (
+              {isOfficeObject(agent.metadata.office) && (
                 <p className="text-secondary-600 text-sm">
                   {agent.metadata.office.metadata.office_name}
                 </p>

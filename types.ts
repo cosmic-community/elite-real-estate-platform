@@ -81,6 +81,11 @@ export interface PropertyFilters {
   maxBathrooms?: number
 }
 
+// Type guards
+export function isOfficeObject(office: Office | string | undefined): office is Office {
+  return office !== undefined && typeof office === 'object' && 'metadata' in office;
+}
+
 // Component Props Types
 export interface AgentCardProps {
   agent: Agent
