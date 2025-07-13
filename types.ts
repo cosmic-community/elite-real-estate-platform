@@ -77,10 +77,10 @@ interface CosmicResponse<T> {
   total: number;
 }
 
-// Filter types
+// Filter types - aligned with PropertyFilter component
 interface PropertyFilters {
-  type?: PropertyType;
-  status?: PropertyStatus;
+  type?: string;
+  status?: string;
   minPrice?: number;
   maxPrice?: number;
   minBedrooms?: number;

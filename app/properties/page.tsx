@@ -30,43 +30,43 @@ export default function PropertiesPage() {
     let filtered = [...properties]
 
     // Filter by property type
-    if (filters.propertyType) {
+    if (filters.type) {
       filtered = filtered.filter(property => 
-        property.metadata.property_type.key === filters.propertyType
+        property.metadata.property_type?.key === filters.type
       )
     }
 
     // Filter by price range
-    if (filters.minPrice > 0) {
+    if (filters.minPrice && filters.minPrice > 0) {
       filtered = filtered.filter(property => 
-        property.metadata.price >= filters.minPrice
+        property.metadata.price >= filters.minPrice!
       )
     }
 
-    if (filters.maxPrice > 0) {
+    if (filters.maxPrice && filters.maxPrice > 0) {
       filtered = filtered.filter(property => 
-        property.metadata.price <= filters.maxPrice
+        property.metadata.price <= filters.maxPrice!
       )
     }
 
     // Filter by bedrooms
-    if (filters.bedrooms > 0) {
+    if (filters.minBedrooms && filters.minBedrooms > 0) {
       filtered = filtered.filter(property => 
-        property.metadata.bedrooms >= filters.bedrooms
+        property.metadata.bedrooms >= filters.minBedrooms!
       )
     }
 
     // Filter by bathrooms
-    if (filters.bathrooms > 0) {
+    if (filters.minBathrooms && filters.minBathrooms > 0) {
       filtered = filtered.filter(property => 
-        property.metadata.bathrooms >= filters.bathrooms
+        property.metadata.bathrooms >= filters.minBathrooms!
       )
     }
 
     // Filter by status
     if (filters.status) {
       filtered = filtered.filter(property => 
-        property.metadata.property_status.key === filters.status
+        property.metadata.property_status?.key === filters.status
       )
     }
 
@@ -78,7 +78,7 @@ export default function PropertiesPage() {
       <div className="min-h-screen py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-lg text-secondary-600">Loading properties...</p>
+            <p className="text-lg text-gray-600">Loading properties...</p>
           </div>
         </div>
       </div>
@@ -89,17 +89,19 @@ export default function PropertiesPage() {
     <div className="min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-secondary-900 mb-4">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Property Listings
           </h1>
-          <p className="text-lg text-secondary-600">
+          <p className="text-lg text-gray-600">
             Discover your dream property from our exclusive collection
           </p>
         </div>
         
-        <PropertyFilter onFilterChange={handleFilterChange} />
+        <div className="mb-8">
+          <PropertyFilter onFilterChange={handleFilterChange} />
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProperties.map((property: Property) => (
             <PropertyCard key={property.id} property={property} />
           ))}
@@ -107,7 +109,7 @@ export default function PropertiesPage() {
         
         {filteredProperties.length === 0 && !loading && (
           <div className="text-center py-12">
-            <p className="text-lg text-secondary-600">
+            <p className="text-lg text-gray-600">
               No properties found matching your filters.
             </p>
           </div>

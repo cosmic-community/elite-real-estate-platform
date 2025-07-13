@@ -6,26 +6,30 @@ interface PropertyFilterProps {
 }
 
 export interface PropertyFilters {
-  propertyType: string
-  minPrice: number
-  maxPrice: number
-  bedrooms: number
-  bathrooms: number
-  status: string
+  type?: string
+  status?: string
+  minPrice?: number
+  maxPrice?: number
+  minBedrooms?: number
+  maxBedrooms?: number
+  minBathrooms?: number
+  maxBathrooms?: number
 }
 
 export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) {
   const [filters, setFilters] = useState<PropertyFilters>({
-    propertyType: '',
-    minPrice: 0,
-    maxPrice: 0,
-    bedrooms: 0,
-    bathrooms: 0,
-    status: ''
+    type: '',
+    status: '',
+    minPrice: undefined,
+    maxPrice: undefined,
+    minBedrooms: undefined,
+    maxBedrooms: undefined,
+    minBathrooms: undefined,
+    maxBathrooms: undefined
   })
 
-  const handleFilterChange = (key: keyof PropertyFilters, value: string | number) => {
-    const newFilters = { ...filters, [key]: value }
+  const handleFilterChange = (key: keyof PropertyFilters, value: string | number | undefined) => {
+    const newFilters = { ...filters, [key]: value === '' ? undefined : value }
     setFilters(newFilters)
     onFilterChange(newFilters)
   }
@@ -41,8 +45,8 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             Property Type
           </label>
           <select
-            value={filters.propertyType}
-            onChange={(e) => handleFilterChange('propertyType', e.target.value)}
+            value={filters.type || ''}
+            onChange={(e) => handleFilterChange('type', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">All Types</option>
@@ -62,7 +66,7 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             <input
               type="number"
               value={filters.minPrice || ''}
-              onChange={(e) => handleFilterChange('minPrice', Number(e.target.value))}
+              onChange={(e) => handleFilterChange('minPrice', e.target.value ? Number(e.target.value) : undefined)}
               placeholder="0"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
@@ -74,7 +78,7 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             <input
               type="number"
               value={filters.maxPrice || ''}
-              onChange={(e) => handleFilterChange('maxPrice', Number(e.target.value))}
+              onChange={(e) => handleFilterChange('maxPrice', e.target.value ? Number(e.target.value) : undefined)}
               placeholder="No limit"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
@@ -84,14 +88,14 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
         {/* Bedrooms */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Bedrooms
+            Min Bedrooms
           </label>
           <select
-            value={filters.bedrooms}
-            onChange={(e) => handleFilterChange('bedrooms', Number(e.target.value))}
+            value={filters.minBedrooms || ''}
+            onChange={(e) => handleFilterChange('minBedrooms', e.target.value ? Number(e.target.value) : undefined)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value={0}>Any</option>
+            <option value="">Any</option>
             <option value={1}>1+</option>
             <option value={2}>2+</option>
             <option value={3}>3+</option>
@@ -103,14 +107,14 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
         {/* Bathrooms */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Bathrooms
+            Min Bathrooms
           </label>
           <select
-            value={filters.bathrooms}
-            onChange={(e) => handleFilterChange('bathrooms', Number(e.target.value))}
+            value={filters.minBathrooms || ''}
+            onChange={(e) => handleFilterChange('minBathrooms', e.target.value ? Number(e.target.value) : undefined)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value={0}>Any</option>
+            <option value="">Any</option>
             <option value={1}>1+</option>
             <option value={2}>2+</option>
             <option value={3}>3+</option>
@@ -124,7 +128,7 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
             Status
           </label>
           <select
-            value={filters.status}
+            value={filters.status || ''}
             onChange={(e) => handleFilterChange('status', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
@@ -138,13 +142,15 @@ export default function PropertyFilter({ onFilterChange }: PropertyFilterProps) 
         {/* Clear Filters */}
         <button
           onClick={() => {
-            const resetFilters = {
-              propertyType: '',
-              minPrice: 0,
-              maxPrice: 0,
-              bedrooms: 0,
-              bathrooms: 0,
-              status: ''
+            const resetFilters: PropertyFilters = {
+              type: '',
+              status: '',
+              minPrice: undefined,
+              maxPrice: undefined,
+              minBedrooms: undefined,
+              maxBedrooms: undefined,
+              minBathrooms: undefined,
+              maxBathrooms: undefined
             }
             setFilters(resetFilters)
             onFilterChange(resetFilters)
