@@ -81,7 +81,7 @@ export interface PropertyFilters {
   maxBathrooms?: number
 }
 
-// Component props interfaces
+// Component Props interfaces
 export interface AgentCardProps {
   agent: Agent
   className?: string
