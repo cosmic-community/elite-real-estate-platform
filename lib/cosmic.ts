@@ -5,7 +5,6 @@ export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
   readKey: process.env.COSMIC_READ_KEY as string,
   writeKey: process.env.COSMIC_WRITE_KEY as string,
-  apiEnvironment: 'staging'
 });
 
 // Helper function for error handling
@@ -23,6 +22,7 @@ export async function getProperties(): Promise<Property[]> {
     
     return response.objects as Property[];
   } catch (error) {
+    console.error('Error fetching properties:', error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -42,6 +42,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     
     return response.object as Property;
   } catch (error) {
+    console.error(`Error fetching property ${slug}:`, error);
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
@@ -95,6 +96,7 @@ export async function getFilteredProperties(filters: PropertyFilters): Promise<P
     
     return properties;
   } catch (error) {
+    console.error('Error fetching filtered properties:', error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -112,6 +114,7 @@ export async function getAgents(): Promise<Agent[]> {
     
     return response.objects as Agent[];
   } catch (error) {
+    console.error('Error fetching agents:', error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -131,6 +134,7 @@ export async function getAgent(slug: string): Promise<Agent | null> {
     
     return response.object as Agent;
   } catch (error) {
+    console.error(`Error fetching agent ${slug}:`, error);
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
@@ -148,6 +152,7 @@ export async function getOffices(): Promise<Office[]> {
     
     return response.objects as Office[];
   } catch (error) {
+    console.error('Error fetching offices:', error);
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
@@ -167,6 +172,7 @@ export async function getOffice(slug: string): Promise<Office | null> {
     
     return response.object as Office;
   } catch (error) {
+    console.error(`Error fetching office ${slug}:`, error);
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
